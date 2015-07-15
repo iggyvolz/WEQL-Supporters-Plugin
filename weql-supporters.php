@@ -27,6 +27,8 @@ if(!function_exists("add_action"))
           weql_uncomplete_actionitem($_GET["id"]);
         }
         break;
+      case "register":
+        weql_register_donor($_GET["id"],$_GET["name"],$_GET["nonce"]);
     endswitch;
   }
 }
@@ -272,7 +274,7 @@ function weql_add_donor($email,$amount)
     {
       echo "We'd like to ensure that there were no problems with the donation so that we can send you the virtual hug.  Please ";
     }
-    $link="http://www.example.com?nonce=".$data["nonce"]; // todo later
+    $link="http://weqlgriffins.tk/register-donation?nonce=".$data["nonce"]."&id=".$data["id"];
     $a=new htmlElement("a",["href"=>$link]);
     while($a->toggle())
     {
