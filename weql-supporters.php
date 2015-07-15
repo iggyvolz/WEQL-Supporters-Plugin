@@ -7,6 +7,27 @@ Version: 0.1
 Author: iggyvolz
 Author URI: https://iggyvolz.github.io
 */
+if(!function_exists("add_action"))
+{
+  require_once(dirname(dirname(dirname(__DIR__)))."/wp-blog-header.php");
+  if(isset($_GET["action"]))
+  {
+    switch($_GET["action"]):
+      case "complete":
+        if(wp_verify_nonce($_GET["_wpnonce"],"complete_".$_GET["id"]))
+        {
+          weql_complete_actionitem($_GET["id"]);
+        }
+        break;
+      case "uncomplete":
+        if(wp_verify_nonce($_GET["_wpnonce"],"uncomplete_".$_GET["id"]))
+        {
+          weql_uncomplete_actionitem($_GET["id"]);
+        }
+        break;
+    endswitch;
+  }
+}
 define("WEQL_VERSION","0.1");
 add_shortcode("weql-supporters", "weql_display_supporters");
 add_action( 'wp_dashboard_setup', 'weql_add_actionitems_widget' );
@@ -54,13 +75,64 @@ function weql_display_action_items()
   }
   else
   {
-    foreach($items as $id)
+    $script=new htmlElement("script");
+    while($script->toggle())
     {
-      $p=new htmlElement("p");
-      while($p->toggle())
+      ?>
+      function weql_dashboard_toggle(id)
       {
-        echo wp_specialchars($wpdb->get_var("SELECT description FROM ${table_name} WHERE id=${id}"));
+        if(!jQuery("#weql_checkbox_"+id)[0].checked)
+        {
+          jQuery.get(jQuery("#weql_uurl_"+id).val());
+          jQuery("#weql_p_"+id).css("color","");
+          jQuery("#weql_p_"+id).css("text-decoration","");
+          jQuery("#weql_containingspan").prepend(jQuery("#weql_p_"+id));
+        }
+        else
+        {
+          jQuery.get(jQuery("#weql_curl_"+id).val());
+          jQuery("#weql_p_"+id).css("color","grey");
+          jQuery("#weql_p_"+id).css("text-decoration","line-through");
+          jQuery("#weql_containingspan").append(jQuery("#weql_p_"+id));
+        }
       }
+      <?php
+    }
+    $containingspan=new htmlElement("span",["id"=>"weql_containingspan"]);
+    while($containingspan->toggle())
+    {
+      $completeitems="";
+      foreach($items as $id)
+      {
+        $completed=$wpdb->get_var("SELECT completed FROM ${table_name} WHERE id=${id}");
+        $data=["id"=>"weql_p_${id}"];
+        if($completed)
+        {
+          $data["style"]="color:grey; text-decoration:line-through";
+          ob_start();
+        }
+        $p=new htmlElement("p",$data);
+        while($p->toggle())
+        {
+          $chidden=new htmlElement("input",["type"=>"hidden","id"=>"weql_curl_${id}","value"=>wp_nonce_url(get_site_url()."/wp-content/plugins/weql-supporters/weql-supporters.php?action=complete&id=${id}","complete_${id}")]);
+          while($chidden->toggle()){}
+          $uhidden=new htmlElement("input",["type"=>"hidden","id"=>"weql_uurl_${id}","value"=>wp_nonce_url(get_site_url()."/wp-content/plugins/weql-supporters/weql-supporters.php?action=uncomplete&id=${id}","uncomplete_${id}")]);
+          while($uhidden->toggle()){}
+          $ndata=["type"=>"checkbox","onclick"=>"weql_dashboard_toggle(${id})","id"=>"weql_checkbox_${id}"];
+          if($completed)
+          {
+            $ndata["checked"]="checked";
+          }
+          $checkbox=new htmlElement("input",$ndata);
+          while($checkbox->toggle()){}
+          echo esc_html($wpdb->get_var("SELECT description FROM ${table_name} WHERE id=${id}"));
+        }
+        if($completed)
+        {
+          $completeitems.=ob_get_clean();
+        }
+      }
+      echo $completeitems;
     }
   }
 }
@@ -164,5 +236,12 @@ function weql_uncomplete_actionitem($id)
 {
   global $wpdb;
   $table_name=$wpdb->prefix."weql_actionitems";
-  $wpdb->update($table_name,["completed"=>null],["id"=>$id]);
+  add_filter( 'query', 'wpse_143405_query' ); // See http://wordpress.stackexchange.com/questions/143405/wpdb-wont-insert-null-into-table-column
+  $wpdb->update($table_name,["completed"=>'null'],["id"=>$id]);
+  remove_filter( 'query', 'wpse_143405_query' );
+}
+
+function wpse_143405_query( $query )
+{
+    return str_ireplace( "'NULL'", "NULL", $query );
 }
