@@ -278,7 +278,7 @@ function weql_add_donor($email,$amount)
     {
       echo "click here";
     }
-    echo "(or, if that link doesn't work, go to this address: $link)";
+    echo " (or, if that link doesn't work, go to this address: $link)";
     if($amount>=500)
     {
       echo " to submit your name so that the rewards can begin to process.";
