@@ -274,7 +274,7 @@ function weql_add_donor($email,$amount)
     {
       echo "We'd like to ensure that there were no problems with the donation so that we can send you the virtual hug.  Please ";
     }
-    $link="http://weqlgriffins.tk/register-donation?nonce=".$data["nonce"]."&id=".$data["id"];
+    $link="http://weqlgriffins.tk/register-donation?nonce=".$data["nonce"]."&id=".$wpdb->insert_id;
     $a=new htmlElement("a",["href"=>$link]);
     while($a->toggle())
     {
