@@ -9,6 +9,11 @@ Author URI: https://iggyvolz.github.io
 */
 define("WEQL_VERSION","0.1");
 add_shortcode("weql-supporters", "weql_display_supporters");
+add_action( 'wp_dashboard_setup', 'weql_add_actionitems_widget' );
+function weql_add_actionitems_widget()
+{
+  wp_add_dashboard_widget("weql-action-items","Action Items","weql_display_action_items");
+}
 
 function weql_display_supporters()
 {
@@ -35,6 +40,29 @@ function weql_display_supporters()
     }
   }
   return ob_get_clean();
+}
+
+function weql_display_action_items()
+{
+  global $wpdb;
+  $table_name=$wpdb->prefix."weql_actionitems";
+  require_once("htmlElement/htmlElement.php");
+  $items=$wpdb->get_col("SELECT id FROM ${table_name} WHERE assignee=".get_current_user_id());
+  if(empty($items))
+  {
+    echo "No action items!";
+  }
+  else
+  {
+    foreach($items as $id)
+    {
+      $p=new htmlElement("p");
+      while($p->toggle())
+      {
+        echo wp_specialchars($wpdb->get_var("SELECT description FROM ${table_name} WHERE id=${id}"));
+      }
+    }
+  }
 }
 
 function weql_install()
@@ -70,8 +98,7 @@ function weql_install()
   description text NOT NULL,
   added datetime NOT NULL,
   completed datetime,
-  UNIQUE KEY id (id),
-  UNIQUE KEY name (name)
+  UNIQUE KEY id (id)
 ) $charset_collate;";
 
   dbDelta( $t1sql );
@@ -87,6 +114,7 @@ function weql_add_donor($email,$amount)
   $table_name=$wpdb->prefix."weql_donors";
   $data=["time"=>current_time('mysql'), "email" => $email, "amount" => $amount, "nonce"=>wp_generate_password(12,false,false)];
   $wpdb->insert($table_name,$data);
+  return ["id"=>$wpdb->insert_id,"nonce"=>$data["nonce"]];
 }
 
 function weql_register_donor($id,$name,$nonce)
@@ -94,6 +122,7 @@ function weql_register_donor($id,$name,$nonce)
   global $wpdb;
   $table_name=$wpdb->prefix."weql_donors";
   $desired_nonce=$wpdb->get_var("SELECT nonce FROM $table_name WHERE id=$id");
+  $amount=$wpdb->get_var("SELECT amount FROM $table_name WHERE id=$id");
   if($nonce!==$desired_nonce)
   {
     return false;
@@ -116,7 +145,7 @@ function weql_create_actionitem($name,$desc,$assign=null)
   global $wpdb;
   $table_name=$wpdb->prefix."weql_actionitems";
   $data=["name"=>$name,"description"=>$desc,"added"=>current_time('mysql')];
-  if($assign)
+  if($assign!==null)
   {
     $data["assignee"]=$assign;
   }
