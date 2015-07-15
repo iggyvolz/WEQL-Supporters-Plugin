@@ -7,6 +7,7 @@ Version: 0.1
 Author: iggyvolz
 Author URI: https://iggyvolz.github.io
 */
+require_once("htmlElement/htmlElement.php");
 define("WEQL_VERSION","0.1");
 if(!function_exists("add_action"))
 {
@@ -40,7 +41,6 @@ function weql_display_supporters()
 {
   global $wpdb;
   $table_name=$wpdb->prefix."weql_donors";
-  require_once("htmlElement/htmlElement.php");
   ob_start();
   foreach(["bronze"=>[100,499],"silver"=>[500,1499],"gold"=>[1500,4999],"platinum"=>[5000,9999],"legendary"=>[10000,99999]] as $type=>$amounts)
   {
