@@ -216,7 +216,7 @@ function weql_add_donor($email,$amount)
   while($p->toggle())
   {
     setlocale(LC_MONETARY, 'en_US.UTF-8');
-    echo "Hello there!  It appears that you've recently made a donation to the WEQL Griffins Community Quidditch Team in the amount of ".money_format('%.2n', $amount) . ".  This qualifies you for the $tier tier of rewards, which are:";
+    echo "Hello there!  It appears that you've recently made a donation to the WEQL Griffins Community Quidditch Team in the amount of ".money_format('%.2n', $amount/100) . ".  This qualifies you for the $tier tier of rewards, which are:";
   }
   $ul=new htmlElement("ul");
   while($ul->toggle())
