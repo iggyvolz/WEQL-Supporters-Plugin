@@ -229,21 +229,21 @@ function weql_add_donor($email,$amount)
         echo "Collaborate with the co-captains to design a play, named in your honor";
       }
     }
-    if($amount>=50000)
+    if($amount>=5000)
     {
       while($li->toggle())
       {
         echo "Choose the jersey number for a WEQL Griffins player (limited number available)";
       }
     }
-    if($amount>=25000)
+    if($amount>=2500)
     {
       while($li->toggle())
       {
         echo "Video thanking you at our next practice";
       }
     }
-    if($amount>=15000)
+    if($amount>=1500)
     {
       while($li->toggle())
       {
