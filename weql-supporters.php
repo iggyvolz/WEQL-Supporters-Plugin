@@ -7,6 +7,7 @@ Version: 0.1
 Author: iggyvolz
 Author URI: https://iggyvolz.github.io
 */
+define("WEQL_VERSION","0.1");
 if(!function_exists("add_action"))
 {
   require_once(dirname(dirname(dirname(__DIR__)))."/wp-blog-header.php");
@@ -28,7 +29,6 @@ if(!function_exists("add_action"))
     endswitch;
   }
 }
-define("WEQL_VERSION","0.1");
 add_shortcode("weql-supporters", "weql_display_supporters");
 add_action( 'wp_dashboard_setup', 'weql_add_actionitems_widget' );
 function weql_add_actionitems_widget()
@@ -186,7 +186,115 @@ function weql_add_donor($email,$amount)
   $table_name=$wpdb->prefix."weql_donors";
   $data=["time"=>current_time('mysql'), "email" => $email, "amount" => $amount, "nonce"=>wp_generate_password(12,false,false)];
   $wpdb->insert($table_name,$data);
-  return ["id"=>$wpdb->insert_id,"nonce"=>$data["nonce"]];
+  if($amount>=10000)
+  {
+    $tier="legendary";
+  }
+  elseif($amount>=50000)
+  {
+    $tier="platinum";
+  }
+  elseif($amount>=25000)
+  {
+    $tier="gold";
+  }
+  elseif($amount>=15000)
+  {
+    $tier="silver";
+  }
+  elseif($amount>=500)
+  {
+    $tier="bronze";
+  }
+  else
+  {
+    $tier="basic";
+  }
+  $subject="Donation to WEQL Griffins";
+  ob_start();
+  $p=new htmlElement("p");
+  while($p->toggle())
+  {
+    setlocale(LC_MONETARY, 'en_US.UTF-8');
+    echo "Hello there!  It appears that you've recently made a donation to the WEQL Griffins Community Quidditch Team in the amount of ".money_format('%.2n', $number) . ".  This qualifies you for the $tier tier of rewards, which are:";
+  }
+  $ul=new htmlElement("ul");
+  while($ul->toggle())
+  {
+    $li=new htmlElement("li");
+    if($amount>=10000)
+    {
+      while($li->toggle())
+      {
+        echo "Collaborate with the co-captains to design a play, named in your honor";
+      }
+    }
+    if($amount>=50000)
+    {
+      while($li->toggle())
+      {
+        echo "Choose the jersey number for a WEQL Griffins player (limited number available)";
+      }
+    }
+    if($amount>=25000)
+    {
+      while($li->toggle())
+      {
+        echo "Video thanking you at our next practice";
+      }
+    }
+    if($amount>=15000)
+    {
+      while($li->toggle())
+      {
+        echo "Shout-out from our blog and Facebook page";
+      }
+    }
+    if($amount>=500)
+    {
+      while($li->toggle())
+      {
+        echo "Listing on our Supporters page as a $tier-tier donor";
+      }
+    }
+    while($li->toggle())
+    {
+      echo "A virtual hug in a thank-you email";
+    }
+  }
+  while($p->toggle())
+  {
+    if($amount>=500)
+    {
+      echo "In order to complete these rewards and ensure that the donation was successful, we need to know your name.  It doesn't have to be your real name if you don't want, but this will be how we list you on our Supporters page and identify you for the rest of the rewards.  Please ";
+    }
+    else
+    {
+      echo "We'd like to ensure that there were no problems with the donation so that we can send you the virtual hug.  Please ";
+    }
+    $link="http://www.example.com?nonce=".$data["nonce"]; // todo later
+    $a=new htmlElement("a",["href"=>$link]);
+    while($a->toggle())
+    {
+      echo "click here";
+    }
+    echo "(or, if that link doesn't work, go to this address: $link)";
+    if($amount>=500)
+    {
+      echo " to submit your name so that the rewards can begin to process.";
+    }
+    else
+    {
+      echo " to confirm your donation.";
+    }
+  }
+  while($p->toggle())
+  {
+    echo "If you have any questions, please feel free to reply to this email.  One of the team's co-captains will respond to you as quickly as possible - hopefully as soon as 24 hours.";
+  }
+  $body=ob_get_clean();
+  $headers=["Content-Type: text/html; charset=UTF-8"];
+  wp_mail($email,$subject,$body,$headers);
 }
 
 function weql_register_donor($id,$name,$nonce)
