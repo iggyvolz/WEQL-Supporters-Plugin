@@ -67,16 +67,7 @@ function weql_display_supporters()
 }
 function weql_display_register()
 {
-  ob_start();
-  ?><script>function getUrlVars() { // Courtesy http://papermashup.com/read-url-get-variables-withjavascript/
-var vars = {};
-var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-vars[key] = value;
-});
-return vars;
-}
-jQuery("#weql_donation_submit").click(function(){var name=encodeURIComponent (jQuery("#weql_donation_name").val());jQuery("#weql_containingspan").html("Processing...");jQuery.get("http://weqlgriffins.tk/wp-content/plugins/weql-supporters/weql-supporters.php?action=register&id="+getUrlVars()["id"]+"&nonce="+getUrlVars()["nonce"]+"&name="+name).done(function(){jQuery("#weql_containingspan").html("Complete!  Expect a follow-up email shortly.")}).fail(function(){jQuery("#weql_containingspan").html("Uh-oh!  Something went wrong.  Try refreshing the page and trying again, or respond to our email with your name so we can put it in manually.")})});</script><?php
-  return ob_get_clean();
+  return "<script>function getUrlVars() {var vars = {};var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {vars[key] = value;});return vars;}jQuery(\"#weql_donation_submit\").click(function(){var name=encodeURIComponent (jQuery(\"#weql_donation_name\").val());jQuery(\"#weql_containingspan\").html(\"Processing...\");jQuery.get(\"http://weqlgriffins.tk/wp-content/plugins/weql-supporters/weql-supporters.php?action=register&id=\"+getUrlVars()[\"id\"]+\"&nonce=\"+getUrlVars()[\"nonce\"]+\"&name=\"+name).done(function(){jQuery(\"#weql_containingspan\").html(\"Complete!  Expect a follow-up email shortly.\")}).fail(function(){jQuery(\"#weql_containingspan\").html(\"Uh-oh!  Something went wrong.  Try refreshing the page and trying again, or respond to our email with your name so we can put it in manually.\")})});</script>";
 }
 
 function weql_display_action_items()
