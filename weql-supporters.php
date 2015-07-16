@@ -9,6 +9,7 @@ Author URI: https://iggyvolz.github.io
 */
 require_once("htmlElement/htmlElement.php");
 define("WEQL_VERSION","0.1");
+define("WEQL_TESTING",true);
 if(!function_exists("add_action"))
 {
   require_once(dirname(dirname(dirname(__DIR__)))."/wp-config.php");
@@ -224,6 +225,13 @@ function weql_add_donor($email,$amount)
   $subject="Donation to WEQL Griffins";
   ob_start();
   $p=new htmlElement("p");
+  if(WEQL_TESTING)
+  {
+    while($p->toggle())
+    {
+      echo "NOTICE - Testing mode is enabled.  You have made no donation and this is just testing the donation-handling system.";
+    }
+  }
   while($p->toggle())
   {
     setlocale(LC_MONETARY, 'en_US.UTF-8');
