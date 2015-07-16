@@ -11,7 +11,8 @@ require_once("htmlElement/htmlElement.php");
 define("WEQL_VERSION","0.1");
 if(!function_exists("add_action"))
 {
-  //require_once(dirname(dirname(dirname(__DIR__)))."/wp-blog-header.php");
+  require_once(dirname(dirname(dirname(__DIR__)))."/wp-config.php");
+  $wp->init();
   if(isset($_GET["action"]))
   {
     switch($_GET["action"]):
