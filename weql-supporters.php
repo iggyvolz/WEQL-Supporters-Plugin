@@ -327,8 +327,8 @@ function weql_register_donor($id,$name,$nonce)
   {
     return false;
   }
-  $name=$wpdb->get_var("SELECT name FROM $table_name WHERE id=$id");
-  if($name!==NULL)
+  $dname=$wpdb->get_var("SELECT name FROM $table_name WHERE id=$id");
+  if($dname!==NULL)
   {
     return false;
   }
