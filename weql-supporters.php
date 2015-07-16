@@ -320,7 +320,7 @@ function weql_register_donor($id,$name,$nonce)
     return false;
   }
   $name=$wpdb->get_var("SELECT name FROM $table_name WHERE id=$id");
-  if(!name)
+  if($name!==NULL)
   {
     return false;
   }
@@ -335,6 +335,7 @@ function weql_register_donor($id,$name,$nonce)
     }
   }
   $wpdb->update($table_name,$data,["id"=>$id]);
+  return true;
 }
 
 function weql_create_actionitem($name,$desc,$assign=null)
