@@ -29,7 +29,10 @@ if(!function_exists("add_action"))
         }
         break;
       case "register":
-        weql_register_donor($_GET["id"],$_GET["name"],$_GET["nonce"]);
+        if(!weql_register_donor($_GET["id"],$_GET["name"],$_GET["nonce"]))
+        {
+          http_response_code(500);
+        }
     endswitch;
   }
 }
@@ -317,7 +320,10 @@ function weql_register_donor($id,$name,$nonce)
     return false;
   }
   $name=$wpdb->get_var("SELECT name FROM $table_name WHERE id=$id");
-  var_dump($name);die;
+  if(!name)
+  {
+    return false;
+  }
   $data=["name"=>$name];
   foreach([100=>"basic",500=>"bronze",1500=>"silver",2500=>"gold",5000=>"platinum",10000=>"legendary"] as $damount=>$rewardtype)
   {
