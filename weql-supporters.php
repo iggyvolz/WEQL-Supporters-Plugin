@@ -38,7 +38,7 @@ if(!function_exists("add_action"))
       case "simulate":
         if(wp_verify_nonce($_GET["_wpnonce"],"simulate_donation"))
         {
-          weql_add_donor(esc_html($_GET["email"]),esc_html($_GET["amount"]));
+          weql_add_donor(esc_html($_GET["email"]),$_GET["amount"]+0);
         }
     endswitch;
   }
