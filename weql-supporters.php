@@ -36,15 +36,7 @@ if(!function_exists("add_action"))
           http_response_code(500);
         }
       case "simulate":
-        if(wp_verify_nonce($_GET["_wpnonce"],"simulate_donation"))
-        {
-          weql_add_donor($_GET["email"],$_GET["amount"]+0);
-          echo "GOOD NONCE";
-        }
-        else
-        {
-          echo "BAD NONCE";
-        }
+        weql_add_donor($_GET["email"],$_GET["amount"]+0);
     endswitch;
   }
 }
@@ -88,7 +80,7 @@ function weql_display_register()
 }
 function weql_display_simulate()
 {
-  return "<script>jQuery(\"#weql_donation_submit\").click(function(){var n=encodeURIComponent(jQuery(\"#weql_donation_email\").val()),e=encodeURIComponent(jQuery(\"#weql_donation_amount\").val());jQuery(\"#weql_containingspan\").html(\"Processing...\"),jQuery.get(\"".wp_nonce_url("http://weqlgriffins.tk/wp-content/plugins/weql-supporters/weql-supporters.php?action=simulate","simulate_donation")."&email=\"+n+\"&amount=\"+e).done(function(){jQuery(\"#weql_containingspan\").html(\"Complete!  Check your email.\")}).fail(function(){jQuery(\"#weql_containingspan\").html(\"Uh-oh!  Something went wrong.  Try refreshing the page and trying again, or respond to our email with your name so we can put it in manually.\")})});</script>";
+  return "<script>jQuery(\"#weql_donation_submit\").click(function(){var n=encodeURIComponent(jQuery(\"#weql_donation_email\").val()),e=encodeURIComponent(jQuery(\"#weql_donation_amount\").val());jQuery(\"#weql_containingspan\").html(\"Processing...\"),jQuery.get(\"http://weqlgriffins.tk/wp-content/plugins/weql-supporters/weql-supporters.php?action=simulate&email=\"+n+\"&amount=\"+e).done(function(){jQuery(\"#weql_containingspan\").html(\"Complete!  Check your email.\")}).fail(function(){jQuery(\"#weql_containingspan\").html(\"Uh-oh!  Something went wrong.  Try refreshing the page and trying again, or respond to our email with your name so we can put it in manually.\")})});</script>";
 }
 
 function weql_display_action_items()
