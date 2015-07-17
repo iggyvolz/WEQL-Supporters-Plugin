@@ -395,7 +395,7 @@ function weql_register_donor($id,$name,$nonce)
     while($p->toggle())
     {
       echo "You've been given a shout-out on our ";
-      $link=new htmlElement("a",["href"=>"http://weqlgriffins.tk/?post_id=".$post_id]);
+      $link=new htmlElement("a",["href"=>"http://weqlgriffins.tk/?p=".$post_id]);
       while($link->toggle())
       {
         echo "blog";
