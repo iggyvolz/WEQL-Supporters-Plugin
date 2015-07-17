@@ -16,7 +16,14 @@ if(!function_exists("add_action"))
   $wp->init();
   if(isset($_GET["action"]))
   {
-    switch($_GET["action"]):
+    $action=$_GET["action"];
+  }
+  if(isset($argv)&&isset($argv[1]))
+  {
+    $action=$argv[1];
+  }
+  if(isset($action))
+    switch($action):
       case "complete":
         if(wp_verify_nonce($_GET["_wpnonce"],"complete_".$_GET["id"]))
         {
