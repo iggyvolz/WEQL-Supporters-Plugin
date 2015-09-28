@@ -3,12 +3,13 @@
 Plugin Name: WEQL Plugin
 Plugin URI: https://github.com/iggyvolz/WEQL-Supporters-Plugin
 Description: Plugin for the WEQL Griffins site to show supporters directly through PayPal
-Version: 0.1
+Version: 0.2
 Author: iggyvolz
 Author URI: https://iggyvolz.github.io
 */
-require_once("htmlElement/htmlElement.php");
-define("WEQL_VERSION","0.1");
+require_once("vendor/autoload.php");
+use htmlElement\htmlElement;
+define("WEQL_VERSION","0.2");
 define("WEQL_TESTING",true);
 setlocale(LC_MONETARY, 'en_US.UTF-8');
 if(!function_exists("add_action"))

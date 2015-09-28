@@ -1,0 +1,35 @@
+[
+    {
+        "name": "iggyvolz/html-element",
+        "version": "v1.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/iggyvolz/htmlElement.git",
+            "reference": "e367233d07ee6f5d87ada3a107ce545d9d34cd7a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/iggyvolz/htmlElement/zipball/e367233d07ee6f5d87ada3a107ce545d9d34cd7a",
+            "reference": "e367233d07ee6f5d87ada3a107ce545d9d34cd7a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2015-07-25 15:51:58",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "htmlElement": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "description": "A simple PHP class that allows you to write HTML tags through while() loops.",
+        "homepage": "http://github.com/iggyvolz/htmlElement"
+    }
+]
