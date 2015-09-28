@@ -89,7 +89,6 @@ function weql_display_action_items()
 {
   global $wpdb;
   $table_name=$wpdb->prefix."weql_actionitems";
-  require_once("htmlElement/htmlElement.php");
   $items=$wpdb->get_col("SELECT id FROM ${table_name} WHERE assignee=".get_current_user_id());
   if(empty($items))
   {
