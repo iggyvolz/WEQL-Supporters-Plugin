@@ -483,5 +483,5 @@ function wpse_143405_query( $query )
 }
 function weql_display_donationamount()
 {
-  echo money_format('%.2n', get_option('weql_total',0)/100);
+  return money_format('%.2n', get_option('weql_total',0)/100);
 }
