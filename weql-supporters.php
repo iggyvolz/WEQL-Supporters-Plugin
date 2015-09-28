@@ -3,13 +3,13 @@
 Plugin Name: WEQL Plugin
 Plugin URI: https://github.com/iggyvolz/WEQL-Supporters-Plugin
 Description: Plugin for the WEQL Griffins site to show supporters directly through PayPal
-Version: 0.2
+Version: 0.21
 Author: iggyvolz
 Author URI: https://iggyvolz.github.io
 */
 require_once("vendor/autoload.php");
 use htmlElement\htmlElement;
-define("WEQL_VERSION","0.2");
+define("WEQL_VERSION","0.21");
 define("WEQL_TESTING",true);
 setlocale(LC_MONETARY, 'en_US.UTF-8');
 if(!function_exists("add_action"))
@@ -44,6 +44,7 @@ if(!function_exists("add_action"))
 add_shortcode("weql-supporters", "weql_display_supporters");
 add_shortcode("weql-register", "weql_display_register");
 add_shortcode("weql-simulate", "weql_display_simulate");
+add_shortcode("weql-donationamount", "weql_display_donationamount");
 add_action( 'wp_dashboard_setup', 'weql_add_actionitems_widget' );
 function weql_add_actionitems_widget()
 {
@@ -479,4 +480,8 @@ function weql_uncomplete_actionitem($id)
 function wpse_143405_query( $query )
 {
     return str_ireplace( "'NULL'", "NULL", $query );
+}
+function weql_display_donationamount()
+{
+  echo money_format('%.2n', get_option('weql_total',0)/100);
 }
